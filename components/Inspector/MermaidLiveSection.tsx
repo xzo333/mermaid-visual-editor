@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { initializeMermaid, renderMermaidSvg } from '@/lib/mermaidRender'
+import { copyText } from '@/lib/clipboard'
 
 const NEU_BG = 'var(--neu-bg)'
 
@@ -57,6 +58,7 @@ function DiagramView({ syntax, containerRef }: { syntax: string; containerRef: R
 function ExpandModal({ syntax, onClose }: { syntax: string; onClose: () => void }) {
   const modalContainerRef = useRef<HTMLDivElement>(null)
   const [copied, setCopied] = useState(false)
+  const [copyFailed, setCopyFailed] = useState(false)
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
@@ -65,9 +67,13 @@ function ExpandModal({ syntax, onClose }: { syntax: string; onClose: () => void 
   }, [onClose])
 
   const handleCopy = async () => {
-    await navigator.clipboard.writeText(syntax)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 1500)
+    const ok = await copyText(syntax)
+    setCopied(ok)
+    setCopyFailed(!ok)
+    setTimeout(() => {
+      setCopied(false)
+      setCopyFailed(false)
+    }, 1500)
   }
 
   return (
@@ -112,12 +118,12 @@ function ExpandModal({ syntax, onClose }: { syntax: string; onClose: () => void 
                 padding: '7px 14px',
                 fontSize: 12,
                 fontWeight: 500,
-                color: copied ? '#4F46E5' : '#6B7280',
+                color: copied ? '#4F46E5' : copyFailed ? '#ef4444' : '#6B7280',
                 cursor: 'pointer',
                 transition: 'box-shadow 0.15s',
               }}
             >
-              {copied ? '✓ 已复制' : '复制语法'}
+              {copied ? '✓ 已复制' : copyFailed ? '复制失败' : '复制语法'}
             </button>
             <button
               onClick={onClose}
@@ -178,6 +184,7 @@ function ExpandModal({ syntax, onClose }: { syntax: string; onClose: () => void 
 export function MermaidLiveSection({ syntax }: MermaidLiveSectionProps) {
   const inlineContainerRef = useRef<HTMLDivElement>(null)
   const [copied, setCopied] = useState(false)
+  const [copyFailed, setCopyFailed] = useState(false)
   const [expanded, setExpanded] = useState(false)
 
   useEffect(() => {
@@ -185,9 +192,13 @@ export function MermaidLiveSection({ syntax }: MermaidLiveSectionProps) {
   }, [])
 
   const handleCopy = async () => {
-    await navigator.clipboard.writeText(syntax)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 1500)
+    const ok = await copyText(syntax)
+    setCopied(ok)
+    setCopyFailed(!ok)
+    setTimeout(() => {
+      setCopied(false)
+      setCopyFailed(false)
+    }, 1500)
   }
 
   return (
@@ -239,13 +250,13 @@ export function MermaidLiveSection({ syntax }: MermaidLiveSectionProps) {
               padding: '4px 10px',
               fontSize: 11,
               fontWeight: 500,
-              color: copied ? '#4F46E5' : '#6B7280',
+              color: copied ? '#4F46E5' : copyFailed ? '#ef4444' : '#6B7280',
               cursor: 'pointer',
               transition: 'box-shadow 0.15s',
               whiteSpace: 'nowrap',
             }}
           >
-            {copied ? '✓ 已复制' : '复制'}
+            {copied ? '✓ 已复制' : copyFailed ? '失败' : '复制'}
           </button>
         </div>
 

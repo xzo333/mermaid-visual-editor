@@ -9,6 +9,7 @@ import { ShapePickerPopover } from '@/components/ShapePickerPopover'
 import { SettingsPopover } from '@/components/SettingsPopover'
 import { ImportModal } from '@/components/ImportModal'
 import { ALL_SHAPES } from '@/components/ShapeIcons'
+import { copyText } from '@/lib/clipboard'
 
 interface TopToolbarProps {
   inspectorOpen: boolean
@@ -110,6 +111,7 @@ export function TopToolbar({ inspectorOpen, onToggleInspector, onOpenPalette, sy
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [importOpen, setImportOpen] = useState(false)
   const [copied, setCopied] = useState(false)
+  const [copyFailed, setCopyFailed] = useState(false)
 
   const { setDrawingShape, addSubgraph } = useFlowStore(
     useShallow((s) => ({
@@ -124,9 +126,13 @@ export function TopToolbar({ inspectorOpen, onToggleInspector, onOpenPalette, sy
   const drawingShapeLabel = ALL_SHAPES.find((item) => item.shape === drawingShape)?.label ?? drawingShape
 
   const handleCopy = async () => {
-    await navigator.clipboard.writeText(syntax)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 1500)
+    const ok = await copyText(syntax)
+    setCopied(ok)
+    setCopyFailed(!ok)
+    setTimeout(() => {
+      setCopied(false)
+      setCopyFailed(false)
+    }, 1500)
   }
 
   const handlePointer = () => {
@@ -183,7 +189,7 @@ export function TopToolbar({ inspectorOpen, onToggleInspector, onOpenPalette, sy
         </NeuIconBtn>
 
         {/* Copy syntax */}
-        <NeuIconBtn onClick={handleCopy} active={copied} title="复制 Mermaid 语法">
+        <NeuIconBtn onClick={handleCopy} active={copied} title={copyFailed ? '复制失败，请手动复制右侧语法' : copied ? '已复制' : '复制 Mermaid 语法'}>
           <IconCopy />
         </NeuIconBtn>
 

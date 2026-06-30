@@ -5,6 +5,7 @@ import { useShallow } from 'zustand/react/shallow'
 import { useFlowStore } from '@/lib/store'
 import { applyDagreLayout } from '@/lib/layout'
 import { serialize } from '@/lib/serializer'
+import { copyText } from '@/lib/clipboard'
 import { ALL_SHAPES, ShapeIcon } from '@/components/ShapeIcons'
 import { ImportModal } from '@/components/ImportModal'
 
@@ -58,8 +59,8 @@ export function CommandPalette({ onClose }: CommandPaletteProps) {
 
   const handleCopySyntax = async () => {
     const { nodes, edges, direction, theme, look, curveStyle } = useFlowStore.getState()
-    await navigator.clipboard.writeText(serialize(nodes, edges, { direction, theme, look, curveStyle }))
-    onClose()
+    const ok = await copyText(serialize(nodes, edges, { direction, theme, look, curveStyle }))
+    if (ok) onClose()
   }
 
   const shapeCommands: CommandItem[] = ALL_SHAPES.map(({ shape, label }) => ({
