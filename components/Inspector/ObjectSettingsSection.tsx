@@ -131,7 +131,7 @@ export function ObjectSettingsSection() {
   if (!hasNodeSelection && !hasEdgeSelection) {
     return (
       <div>
-        <div style={sectionLabelStyle}>Object Settings</div>
+        <div style={sectionLabelStyle}>对象设置</div>
         <div
           style={{
             background: NEU_BG,
@@ -146,7 +146,7 @@ export function ObjectSettingsSection() {
         >
           <div style={{ fontSize: 24, opacity: 0.3 }}>◻</div>
           <div style={{ fontSize: 12, color: '#9ca3af', textAlign: 'center', lineHeight: 1.5 }}>
-            Select a node or edge to edit its properties
+            选择节点或连线后编辑属性
           </div>
         </div>
       </div>
@@ -155,7 +155,7 @@ export function ObjectSettingsSection() {
 
   return (
     <div>
-      <div style={sectionLabelStyle}>Object Settings</div>
+      <div style={sectionLabelStyle}>对象设置</div>
 
       {/* Node Properties */}
       {hasNodeSelection && (
@@ -169,7 +169,7 @@ export function ObjectSettingsSection() {
           }}
         >
           <div style={{ fontSize: 11, fontWeight: 600, color: '#374151', marginBottom: 12 }}>
-            {selectedNodes.length === 1 ? '1 node selected' : `${selectedNodes.length} nodes selected`}
+            已选择 {selectedNodes.length} 个节点
           </div>
 
           {/* Color swatches */}
@@ -178,21 +178,21 @@ export function ObjectSettingsSection() {
               key={selectedNodes.map(n => n.id).join('-') + '-fill'}
               value={selectedNodes[0].data.fillColor}
               defaultVal="#ffffff"
-              label="Fill"
+              label="填充"
               onChange={(color) => selectedNodes.forEach((n) => updateNodeStyle(n.id, { fillColor: color }))}
             />
             <ColorSwatch
               key={selectedNodes.map(n => n.id).join('-') + '-stroke'}
               value={selectedNodes[0].data.strokeColor}
               defaultVal="#9ca3af"
-              label="Border"
+              label="边框"
               onChange={(color) => selectedNodes.forEach((n) => updateNodeStyle(n.id, { strokeColor: color }))}
             />
             <ColorSwatch
               key={selectedNodes.map(n => n.id).join('-') + '-text'}
               value={selectedNodes[0].data.textColor}
               defaultVal="#1f2937"
-              label="Text"
+              label="文字"
               onChange={(color) => selectedNodes.forEach((n) => updateNodeStyle(n.id, { textColor: color }))}
             />
           </div>
@@ -202,7 +202,7 @@ export function ObjectSettingsSection() {
               updateNodeStyle(n.id, { fillColor: undefined, strokeColor: undefined, textColor: undefined })
             )}
           >
-            Reset colors
+            重置颜色
           </NeuBtn>
         </div>
       )}
@@ -218,18 +218,18 @@ export function ObjectSettingsSection() {
           }}
         >
           <div style={{ fontSize: 11, fontWeight: 600, color: '#374151', marginBottom: 12 }}>
-            {selectedEdges.length === 1 ? '1 edge selected' : `${selectedEdges.length} edges selected`}
+            已选择 {selectedEdges.length} 条连线
           </div>
 
           {/* Edge style */}
-          <div style={{ fontSize: 10, color: '#9ca3af', marginBottom: 6 }}>Line style</div>
+          <div style={{ fontSize: 10, color: '#9ca3af', marginBottom: 6 }}>线条样式</div>
           <div style={{ display: 'flex', gap: 6, marginBottom: 12 }}>
             {(['solid', 'dashed', 'thick'] as EdgeStyle[]).map((style) => (
               <NeuBtn
                 key={style}
                 onClick={() => selectedEdges.forEach((e) => updateEdgeType(e.id, { edgeStyle: style }))}
                 active={activeEdgeStyle === style}
-                title={`${style} line`}
+                title={style === 'solid' ? '实线' : style === 'dashed' ? '虚线' : '粗线'}
               >
                 {style === 'solid' ? '─' : style === 'dashed' ? '╌' : '━'}
               </NeuBtn>
@@ -237,15 +237,15 @@ export function ObjectSettingsSection() {
           </div>
 
           {/* Arrow type */}
-          <div style={{ fontSize: 10, color: '#9ca3af', marginBottom: 6 }}>Arrow</div>
+          <div style={{ fontSize: 10, color: '#9ca3af', marginBottom: 6 }}>箭头</div>
           <div style={{ display: 'flex', gap: 6, marginBottom: 12, flexWrap: 'wrap' }}>
             {(
               [
-                { type: 'arrow', label: '→', ariaLabel: 'Arrow' },
-                { type: 'none', label: '─', ariaLabel: 'None' },
-                { type: 'bidirectional', label: '↔', ariaLabel: 'Bidirectional' },
-                { type: 'circle', label: '○', ariaLabel: 'Circle' },
-                { type: 'cross', label: '✕', ariaLabel: 'Cross' },
+                { type: 'arrow', label: '→', ariaLabel: '箭头' },
+                { type: 'none', label: '─', ariaLabel: '无箭头' },
+                { type: 'bidirectional', label: '↔', ariaLabel: '双向箭头' },
+                { type: 'circle', label: '○', ariaLabel: '圆点端点' },
+                { type: 'cross', label: '✕', ariaLabel: '叉号端点' },
               ] as { type: ArrowType; label: string; ariaLabel: string }[]
             ).map(({ type, label, ariaLabel }) => (
               <NeuBtn
@@ -260,12 +260,12 @@ export function ObjectSettingsSection() {
           </div>
 
           {/* Edge color */}
-          <div style={{ fontSize: 10, color: '#9ca3af', marginBottom: 8 }}>Color</div>
+          <div style={{ fontSize: 10, color: '#9ca3af', marginBottom: 8 }}>颜色</div>
           <ColorSwatch
             key={selectedEdges.map(e => e.id).join('-')}
             value={(selectedEdges[0].data as FlowEdgeData | undefined)?.strokeColor}
             defaultVal="#9ca3af"
-            label="Edge color"
+            label="连线颜色"
             onChange={(color) => selectedEdges.forEach((e) => updateEdgeType(e.id, { strokeColor: color }))}
           />
         </div>

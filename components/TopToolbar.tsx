@@ -8,6 +8,7 @@ import { useFlowStore } from '@/lib/store'
 import { ShapePickerPopover } from '@/components/ShapePickerPopover'
 import { SettingsPopover } from '@/components/SettingsPopover'
 import { ImportModal } from '@/components/ImportModal'
+import { ALL_SHAPES } from '@/components/ShapeIcons'
 
 interface TopToolbarProps {
   inspectorOpen: boolean
@@ -120,6 +121,7 @@ export function TopToolbar({ inspectorOpen, onToggleInspector, onOpenPalette, sy
   const drawingShape = useFlowStore((s) => s.drawingShape)
   const shapePickerRef = useRef<HTMLDivElement>(null)
   const settingsRef = useRef<HTMLDivElement>(null)
+  const drawingShapeLabel = ALL_SHAPES.find((item) => item.shape === drawingShape)?.label ?? drawingShape
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(syntax)
@@ -147,32 +149,32 @@ export function TopToolbar({ inspectorOpen, onToggleInspector, onOpenPalette, sy
         }}
       >
         {/* Layers / Inspector toggle */}
-        <NeuIconBtn onClick={onToggleInspector} active={inspectorOpen} title="Toggle Inspector panel">
+        <NeuIconBtn onClick={onToggleInspector} active={inspectorOpen} title="显示/隐藏检查器">
           <IconLayers />
         </NeuIconBtn>
 
         {/* Pointer / Select mode */}
-        <NeuIconBtn onClick={handlePointer} active={!drawingShape} title="Select mode (Escape)">
+        <NeuIconBtn onClick={handlePointer} active={!drawingShape} title="选择模式 (Escape)">
           <IconPointer />
         </NeuIconBtn>
 
         {/* Shape picker */}
         <div ref={shapePickerRef} style={{ position: 'relative' }}>
-          <NeuIconBtn onClick={() => { setShapePickerOpen((v) => !v); setSettingsOpen(false) }} active={shapePickerOpen} title="Shape picker">
+          <NeuIconBtn onClick={() => { setShapePickerOpen((v) => !v); setSettingsOpen(false) }} active={shapePickerOpen} title="选择形状">
             <IconCube />
           </NeuIconBtn>
           {shapePickerOpen && <ShapePickerPopover onClose={() => setShapePickerOpen(false)} />}
         </div>
 
         {/* Add Group — next to shape picker */}
-        <NeuIconBtn onClick={() => addSubgraph()} title="Add a group/subgraph container">
+        <NeuIconBtn onClick={() => addSubgraph()} title="添加分组/子图容器">
           ⬡
         </NeuIconBtn>
 
         <Divider />
 
         {/* Import Mermaid */}
-        <NeuIconBtn onClick={() => setImportOpen(true)} title="Import Mermaid syntax">
+        <NeuIconBtn onClick={() => setImportOpen(true)} title="导入 Mermaid 语法">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
             <polyline points="17 8 12 3 7 8" />
@@ -181,7 +183,7 @@ export function TopToolbar({ inspectorOpen, onToggleInspector, onOpenPalette, sy
         </NeuIconBtn>
 
         {/* Copy syntax */}
-        <NeuIconBtn onClick={handleCopy} active={copied} title="Copy Mermaid syntax">
+        <NeuIconBtn onClick={handleCopy} active={copied} title="复制 Mermaid 语法">
           <IconCopy />
         </NeuIconBtn>
 
@@ -189,7 +191,7 @@ export function TopToolbar({ inspectorOpen, onToggleInspector, onOpenPalette, sy
         {onOpenPalette && (
           <>
             <Divider />
-            <NeuIconBtn onClick={onOpenPalette} title="Command palette (⌘K)">
+            <NeuIconBtn onClick={onOpenPalette} title="命令面板 (⌘K)">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
               </svg>
@@ -199,7 +201,7 @@ export function TopToolbar({ inspectorOpen, onToggleInspector, onOpenPalette, sy
 
         {/* Settings */}
         <div ref={settingsRef} style={{ position: 'relative' }}>
-          <NeuIconBtn onClick={() => { setSettingsOpen((v) => !v); setShapePickerOpen(false) }} active={settingsOpen} title="Settings">
+          <NeuIconBtn onClick={() => { setSettingsOpen((v) => !v); setShapePickerOpen(false) }} active={settingsOpen} title="设置">
             <IconSettings />
           </NeuIconBtn>
           {settingsOpen && <SettingsPopover onClose={() => setSettingsOpen(false)} />}
@@ -225,7 +227,7 @@ export function TopToolbar({ inspectorOpen, onToggleInspector, onOpenPalette, sy
             boxShadow: '0 4px 12px rgba(79,70,229,0.4)',
           }}
         >
-          Drawing: {drawingShape} — click &amp; drag on canvas — Esc to cancel
+          正在绘制：{drawingShapeLabel}，在画布上点击并拖拽，按 Esc 取消
         </div>
       )}
     </div>

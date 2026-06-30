@@ -2,6 +2,7 @@
 
 import { useReactFlow } from '@xyflow/react'
 import { useFlowStore } from '@/lib/store'
+import { ALL_SHAPES } from '@/components/ShapeIcons'
 
 const NEU_BG = 'var(--neu-bg)'
 
@@ -21,10 +22,10 @@ export function LayerStackSection() {
     return (
       <div>
         <div style={{ fontSize: 11, fontWeight: 700, color: '#9ca3af', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 10 }}>
-          Layers
+          图层
         </div>
         <div style={{ fontSize: 12, color: '#9ca3af', textAlign: 'center', padding: '12px 0' }}>
-          No nodes yet
+          还没有节点
         </div>
       </div>
     )
@@ -33,7 +34,7 @@ export function LayerStackSection() {
   return (
     <div>
       <div style={{ fontSize: 11, fontWeight: 700, color: '#9ca3af', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 10 }}>
-        Layers ({nodes.length})
+        图层 ({nodes.length})
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 4, maxHeight: 200, overflowY: 'auto' }}>
         {nodes.map((node) => {
@@ -43,7 +44,7 @@ export function LayerStackSection() {
             <button
               key={node.id}
               onClick={() => selectNode(node.id)}
-              title={`Select ${node.data.label}`}
+              title={`选择 ${node.data.label}`}
               style={{
                 background: NEU_BG,
                 border: 'none',
@@ -66,7 +67,7 @@ export function LayerStackSection() {
                 {node.data.label || node.id}
               </span>
               <span style={{ fontSize: 10, color: '#9ca3af', flexShrink: 0 }}>
-                {node.data.shape ?? 'rect'}
+                {ALL_SHAPES.find((item) => item.shape === node.data.shape)?.label ?? '矩形'}
               </span>
             </button>
           )

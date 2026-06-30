@@ -92,7 +92,7 @@ export function DiagramSettingsSection() {
 
   return (
     <div>
-      <div style={sectionLabelStyle}>Diagram Settings</div>
+      <div style={sectionLabelStyle}>图表设置</div>
 
       <div
         style={{
@@ -103,7 +103,7 @@ export function DiagramSettingsSection() {
         }}
       >
         {/* Layout */}
-        <div style={subLabelStyle}>Layout Direction</div>
+        <div style={subLabelStyle}>布局方向</div>
         <div style={{ display: 'flex', gap: 6, marginBottom: 14 }}>
           {DIRECTIONS.map(({ value, label, title }) => (
             <NeuBtn key={value} onClick={() => handleDirectionChange(value)} active={direction === value} title={title}>
@@ -113,9 +113,9 @@ export function DiagramSettingsSection() {
         </div>
 
         {/* Theme */}
-        <div style={subLabelStyle}>Theme</div>
+        <div style={subLabelStyle}>主题</div>
         <div style={{ marginBottom: 10 }}>
-          <select value={theme} onChange={(e) => setTheme(e.target.value as Theme)} style={selectStyle} aria-label="Theme">
+          <select value={theme} onChange={(e) => setTheme(e.target.value as Theme)} style={selectStyle} aria-label="主题">
             {THEMES.map(({ value, label }) => (
               <option key={value} value={value}>{label}</option>
             ))}
@@ -123,9 +123,9 @@ export function DiagramSettingsSection() {
         </div>
 
         {/* Curve Style */}
-        <div style={subLabelStyle}>Curve Style</div>
+        <div style={subLabelStyle}>曲线样式</div>
         <div style={{ marginBottom: 10 }}>
-          <select value={curveStyle} onChange={(e) => setCurveStyle(e.target.value as CurveStyle)} style={selectStyle} aria-label="Curve Style">
+          <select value={curveStyle} onChange={(e) => setCurveStyle(e.target.value as CurveStyle)} style={selectStyle} aria-label="曲线样式">
             {CURVE_STYLES.map(({ value, label }) => (
               <option key={value} value={value}>{label}</option>
             ))}
@@ -136,9 +136,9 @@ export function DiagramSettingsSection() {
         <NeuBtn
           onClick={() => setLook(look === 'handDrawn' ? 'classic' : 'handDrawn')}
           active={look === 'handDrawn'}
-          title="Toggle hand-drawn look"
+          title="切换手绘风格"
         >
-          ✏ Hand-drawn {look === 'handDrawn' ? 'On' : 'Off'}
+          ✏ 手绘风格 {look === 'handDrawn' ? '开启' : '关闭'}
         </NeuBtn>
       </div>
     </div>

@@ -113,7 +113,7 @@ export function InspectorPanel({ syntax, onCollapse }: InspectorPanelProps) {
         }}
       >
         <span style={{ fontSize: 14, fontWeight: 700, color: '#374151', letterSpacing: '-0.01em' }}>
-          Inspector
+          检查器
         </span>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginLeft: 'auto' }}>
@@ -121,8 +121,8 @@ export function InspectorPanel({ syntax, onCollapse }: InspectorPanelProps) {
           <button
             onClick={handleAutoLayout}
             disabled={nodesLength === 0}
-            title="Auto-arrange nodes into a hierarchy"
-            aria-label="Auto Layout"
+            title="将节点自动排列成层级结构"
+            aria-label="自动布局"
             style={{
               background: NEU_BG,
               border: 'none',
@@ -143,14 +143,14 @@ export function InspectorPanel({ syntax, onCollapse }: InspectorPanelProps) {
             }}
           >
             <IconAutoLayout />
-            Auto Layout
+            自动布局
           </button>
 
           {/* Collapse */}
           <button
             onClick={onCollapse}
-          title="Collapse inspector"
-          aria-label="Collapse inspector"
+          title="收起检查器"
+          aria-label="收起检查器"
           style={{
             background: NEU_BG,
             border: 'none',
@@ -174,11 +174,11 @@ export function InspectorPanel({ syntax, onCollapse }: InspectorPanelProps) {
 
       {/* Scrollable content */}
       <div style={{ flex: 1, overflowY: 'auto', padding: '0 16px 20px' }}>
-        <AccordionSection title="Object Settings" open={objectOpen} onToggle={() => setObjectOpen((v) => !v)}>
+        <AccordionSection title="对象设置" open={objectOpen} onToggle={() => setObjectOpen((v) => !v)}>
           <ObjectSettingsSection />
         </AccordionSection>
         <div style={{ height: 8 }} />
-        <AccordionSection title="Diagram Settings" open={diagramOpen} onToggle={() => setDiagramOpen((v) => !v)}>
+        <AccordionSection title="图表设置" open={diagramOpen} onToggle={() => setDiagramOpen((v) => !v)}>
           <DiagramSettingsSection />
         </AccordionSection>
         <div style={{ height: 8 }} />

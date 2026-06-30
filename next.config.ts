@@ -3,6 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   output: 'export',       // generates out/ directory
   trailingSlash: true,    // each route → /route/index.html
+  devIndicators: false,
 
   // NOTE: headers() only applies to `next dev` / `next start`.
   // The static out/ export is served by bin/cli.js (serve package) —

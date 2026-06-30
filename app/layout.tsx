@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Mermaid Visual Editor',
-  description: 'Visual drag-and-drop editor for Mermaid.js diagrams',
+  title: 'Mermaid 可视化编辑器',
+  description: '用于 Mermaid.js 图表的可视化拖拽编辑器',
 }
 
 export default function RootLayout({
@@ -12,7 +12,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="zh-CN">
       <body className="antialiased" suppressHydrationWarning>{children}</body>
     </html>
   )

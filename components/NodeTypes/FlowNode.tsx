@@ -258,7 +258,7 @@ function NodeLabel({
         onKeyDown={onKeyDown}
         className="bg-transparent border-none outline-none text-center text-sm w-full"
         autoFocus
-        aria-label="Node label"
+        aria-label="节点标签"
       />
     )
   }
@@ -283,7 +283,7 @@ export function FlowNode({ id, data, selected }: NodeProps) {
   const pushHistory = useFlowStore((s) => s.pushHistory)
 
   const commitLabel = useCallback(() => {
-    const trimmed = draft.trim() || 'Node'
+    const trimmed = draft.trim() || '节点'
     updateNodeLabel(id, trimmed)
     setEditing(false)
   }, [draft, id, updateNodeLabel])

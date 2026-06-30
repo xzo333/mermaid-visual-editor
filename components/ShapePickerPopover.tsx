@@ -71,7 +71,7 @@ export function ShapePickerPopover({ onClose }: ShapePickerPopoverProps) {
       }}
     >
       <div style={{ fontSize: 11, fontWeight: 600, color: '#9ca3af', letterSpacing: '0.08em', marginBottom: 10, textTransform: 'uppercase' }}>
-        {hasNodeSelection ? 'Change Shape' : 'Draw Shape'}
+        {hasNodeSelection ? '更改形状' : '绘制形状'}
       </div>
       {rows.map((row, ri) => (
         <div key={ri} style={{ display: 'flex', gap: 6, marginBottom: ri === 0 ? 6 : 0 }}>
@@ -108,7 +108,7 @@ export function ShapePickerPopover({ onClose }: ShapePickerPopoverProps) {
       ))}
       {!hasNodeSelection && drawingShape && (
         <div style={{ marginTop: 10, fontSize: 11, color: '#4F46E5', textAlign: 'center' }}>
-          Click &amp; drag on canvas to draw — Esc to cancel
+          在画布上点击并拖拽绘制，按 Esc 取消
         </div>
       )}
     </div>

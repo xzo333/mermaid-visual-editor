@@ -8,7 +8,7 @@ export function SearchBar({ onOpen }: SearchBarProps) {
   return (
     <button
       onClick={onOpen}
-      title="Open command palette (⌘K)"
+      title="打开命令面板 (⌘K)"
       style={{
         background: 'var(--neu-bg)',
         borderRadius: 50,
@@ -28,7 +28,7 @@ export function SearchBar({ onOpen }: SearchBarProps) {
         <line x1="21" y1="21" x2="16.65" y2="16.65" />
       </svg>
       <span style={{ fontSize: 12, color: '#9ca3af', userSelect: 'none' }}>
-        Search or command…
+        搜索或输入命令...
       </span>
       <span style={{ marginLeft: 'auto', fontSize: 10, color: '#c4cdd8', background: 'var(--neu-bg)', borderRadius: 6, padding: '2px 6px', boxShadow: 'var(--neu-shadow-raised)', fontFamily: 'monospace' }}>
         ⌘K

@@ -101,20 +101,20 @@ export function ZoomControls() {
         zIndex: 10,
       }}
     >
-      <ZoomBtn onClick={undo} title="Undo (Ctrl+Z)" disabled={pastLength === 0}>
+      <ZoomBtn onClick={undo} title="撤销 (Ctrl+Z)" disabled={pastLength === 0}>
         <IconUndo />
       </ZoomBtn>
-      <ZoomBtn onClick={redo} title="Redo (Ctrl+Shift+Z)" disabled={futureLength === 0}>
+      <ZoomBtn onClick={redo} title="重做 (Ctrl+Shift+Z)" disabled={futureLength === 0}>
         <IconRedo />
       </ZoomBtn>
 
       <div style={{ width: 1, height: 16, background: 'rgba(163,177,198,0.4)', margin: '0 2px', flexShrink: 0 }} />
 
-      <ZoomBtn onClick={handleZoomOut} title="Zoom out">−</ZoomBtn>
+      <ZoomBtn onClick={handleZoomOut} title="缩小">−</ZoomBtn>
 
       <button
         onClick={handleFit}
-        title="Fit view"
+        title="适配视图"
         style={{
           background: NEU_BG,
           border: 'none',
@@ -129,10 +129,10 @@ export function ZoomControls() {
           textAlign: 'center',
         }}
       >
-        {zoom !== null ? `${zoom}%` : 'Fit'}
+        {zoom !== null ? `${zoom}%` : '适配'}
       </button>
 
-      <ZoomBtn onClick={handleZoomIn} title="Zoom in">+</ZoomBtn>
+      <ZoomBtn onClick={handleZoomIn} title="放大">+</ZoomBtn>
     </div>
   )
 }

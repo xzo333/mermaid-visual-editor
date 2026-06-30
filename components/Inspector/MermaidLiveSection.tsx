@@ -1,10 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import mermaid from 'mermaid'
-
-let initialized = false
-let renderId = 0
+import { initializeMermaid, renderMermaidSvg } from '@/lib/mermaidRender'
 
 const NEU_BG = 'var(--neu-bg)'
 
@@ -17,30 +14,44 @@ function DiagramView({ syntax, containerRef }: { syntax: string; containerRef: R
 
   useEffect(() => {
     if (!containerRef.current) return
+    let cancelled = false
     const render = async () => {
-      const id = `mermaid-insp-${++renderId}`
       try {
-        const { svg } = await mermaid.render(id, syntax)
-        if (containerRef.current) {
+        const svg = await renderMermaidSvg(syntax, 'mermaid-insp')
+        if (!cancelled && containerRef.current) {
           containerRef.current.innerHTML = svg
           setError(null)
         }
       } catch (err) {
-        document.getElementById(id)?.remove()
-        setError(err instanceof Error ? err.message : 'Render error')
+        if (!cancelled) {
+          setError(err instanceof Error ? err.message : '渲染失败')
+        }
       }
     }
     render()
+    return () => {
+      cancelled = true
+    }
   }, [syntax, containerRef])
 
-  if (error) {
-    return (
+  return (
+    <>
+      <div
+        ref={containerRef}
+        style={{
+          display: error ? 'none' : 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          minHeight: 40,
+        }}
+      />
+      {error && (
       <div style={{ fontSize: 10, color: '#ef4444', fontFamily: 'monospace', whiteSpace: 'pre-wrap' }}>
         {error}
       </div>
-    )
-  }
-  return <div ref={containerRef} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 40 }} />
+      )}
+    </>
+  )
 }
 
 function ExpandModal({ syntax, onClose }: { syntax: string; onClose: () => void }) {
@@ -89,7 +100,7 @@ function ExpandModal({ syntax, onClose }: { syntax: string; onClose: () => void 
       >
         {/* Modal header */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '18px 24px', borderBottom: '1px solid rgba(163,177,198,0.3)', flexShrink: 0 }}>
-          <span style={{ fontSize: 14, fontWeight: 700, color: '#374151' }}>Mermaid Preview</span>
+          <span style={{ fontSize: 14, fontWeight: 700, color: '#374151' }}>Mermaid 预览</span>
           <div style={{ display: 'flex', gap: 8 }}>
             <button
               onClick={handleCopy}
@@ -106,7 +117,7 @@ function ExpandModal({ syntax, onClose }: { syntax: string; onClose: () => void 
                 transition: 'box-shadow 0.15s',
               }}
             >
-              {copied ? '✓ Copied' : 'Copy Syntax'}
+              {copied ? '✓ 已复制' : '复制语法'}
             </button>
             <button
               onClick={onClose}
@@ -156,7 +167,7 @@ function ExpandModal({ syntax, onClose }: { syntax: string; onClose: () => void 
           }}
         >
           <pre style={{ margin: 0, fontSize: 11, color: '#86efac', fontFamily: 'monospace', whiteSpace: 'pre', lineHeight: 1.6 }}>
-            {syntax || '— empty —'}
+            {syntax || '— 空 —'}
           </pre>
         </div>
       </div>
@@ -170,10 +181,7 @@ export function MermaidLiveSection({ syntax }: MermaidLiveSectionProps) {
   const [expanded, setExpanded] = useState(false)
 
   useEffect(() => {
-    if (!initialized) {
-      mermaid.initialize({ startOnLoad: false, theme: 'default', securityLevel: 'strict' })
-      initialized = true
-    }
+    initializeMermaid()
   }, [])
 
   const handleCopy = async () => {
@@ -190,13 +198,13 @@ export function MermaidLiveSection({ syntax }: MermaidLiveSectionProps) {
         {/* Section header */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 10 }}>
           <span style={{ fontSize: 11, fontWeight: 700, color: '#9ca3af', letterSpacing: '0.08em', textTransform: 'uppercase', flex: 1 }}>
-            Mermaid Live
+            Mermaid 实时预览
           </span>
 
           {/* Expand button */}
           <button
             onClick={() => setExpanded(true)}
-            title="Expand preview"
+            title="展开预览"
             style={{
               background: NEU_BG,
               border: 'none',
@@ -237,7 +245,7 @@ export function MermaidLiveSection({ syntax }: MermaidLiveSectionProps) {
               whiteSpace: 'nowrap',
             }}
           >
-            {copied ? '✓ Copied' : 'Copy'}
+            {copied ? '✓ 已复制' : '复制'}
           </button>
         </div>
 
@@ -257,7 +265,7 @@ export function MermaidLiveSection({ syntax }: MermaidLiveSectionProps) {
             cursor: 'pointer',
           }}
           onClick={() => setExpanded(true)}
-          title="Click to expand"
+          title="点击展开"
         >
           <DiagramView syntax={syntax} containerRef={inlineContainerRef} />
         </div>
@@ -274,7 +282,7 @@ export function MermaidLiveSection({ syntax }: MermaidLiveSectionProps) {
           }}
         >
           <pre style={{ margin: 0, fontSize: 10, color: '#86efac', fontFamily: 'monospace', whiteSpace: 'pre', lineHeight: 1.6 }}>
-            {syntax || '— empty —'}
+            {syntax || '— 空 —'}
           </pre>
         </div>
       </div>

@@ -4,6 +4,7 @@ import {
   ReactFlow,
   Background,
   BackgroundVariant,
+  PanOnScrollMode,
   useReactFlow,
   type Node,
 } from '@xyflow/react'
@@ -272,6 +273,10 @@ function CanvasInner({ onOpenPalette }: CanvasInnerProps) {
         onNodeDragStop={handleNodeDragStop}
         fitView
         deleteKeyCode={['Backspace', 'Delete']}
+        zoomOnScroll={false}
+        panOnScroll
+        panOnScrollMode={PanOnScrollMode.Vertical}
+        panOnScrollSpeed={0.7}
         panOnDrag={drawingShape ? false : [1, 2]}
         selectionOnDrag={!drawingShape}
         multiSelectionKeyCode={['Shift', 'Control']}
@@ -291,11 +296,11 @@ function CanvasInner({ onOpenPalette }: CanvasInnerProps) {
       {nodes.length === 0 && !drawingShape && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           <div className="text-center text-gray-400">
-            <p className="text-lg font-medium">Canvas is empty</p>
+            <p className="text-lg font-medium">画布为空</p>
             <p className="text-sm mt-1">
-                Select a shape above and drag to draw, double-click canvas, or press{' '}
+              在上方选择形状后拖拽绘制，也可以双击画布，或按{' '}
               <kbd className="px-1 py-0.5 rounded bg-gray-100 text-gray-500 text-xs font-mono">N</kbd>{' '}
-              to add a node. Drag on empty canvas to select multiple nodes.
+              添加节点。拖动画布空白处可以框选多个节点。
             </p>
           </div>
         </div>

@@ -440,11 +440,11 @@ export function parseMermaidFlowchart(syntax: string): ParseResult {
     }
 
     if (!foundHeader) {
-      return { ...empty, error: 'No valid flowchart header found. Start with "flowchart TD" (or LR/BT/RL).' }
+      return { ...empty, error: '没有找到有效的 flowchart 头部。请以 "flowchart TD" 开始，也可以使用 LR/BT/RL。' }
     }
 
     if (nodesMap.size === 0) {
-      return { ...empty, error: 'No nodes found. Add at least one node.' }
+      return { ...empty, error: '没有找到节点。请至少添加一个节点。' }
     }
 
     // Apply pending node styles
@@ -464,6 +464,6 @@ export function parseMermaidFlowchart(syntax: string): ParseResult {
 
     return { nodes, edges, direction, theme, look, curveStyle, error: null }
   } catch (err) {
-    return { ...empty, error: err instanceof Error ? err.message : 'Parse error' }
+    return { ...empty, error: err instanceof Error ? err.message : '解析失败' }
   }
 }

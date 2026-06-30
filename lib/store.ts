@@ -274,7 +274,7 @@ export const useFlowStore = create<FlowState>((set, get) => {
         id,
         type: "flowNode",
         position: { x: 150 + offset, y: 100 + offset },
-        data: { label: "Node", shape },
+        data: { label: "节点", shape },
       };
       set({ nodes: [...get().nodes, newNode] });
     }),
@@ -286,7 +286,7 @@ export const useFlowStore = create<FlowState>((set, get) => {
           id,
           type: "flowNode",
           position,
-          data: { label: "Node", shape },
+          data: { label: "节点", shape },
           ...(width && height ? { style: { width, height } } : {}),
         };
         set({ nodes: [...get().nodes, newNode] });
@@ -375,7 +375,7 @@ export const useFlowStore = create<FlowState>((set, get) => {
       });
     }),
 
-    addSubgraph: withHistory((title = "Group") => {
+    addSubgraph: withHistory((title = "分组") => {
       const id = `sg_${nodeCounter++}`;
       const offset = (nodeCounter * 30) % 200;
       const newNode: Node<FlowNodeData> = {
@@ -472,7 +472,7 @@ export const useFlowStore = create<FlowState>((set, get) => {
       const newNodes = selectedNodes.map((n) => {
         const newId = `node_${nodeCounter++}`;
         idMap.set(n.id, newId);
-        const label = n.data.isSubgraph ? `Copy of ${n.data.label}` : n.data.label;
+        const label = n.data.isSubgraph ? `${n.data.label} 副本` : n.data.label;
         return {
           ...n,
           id: newId,

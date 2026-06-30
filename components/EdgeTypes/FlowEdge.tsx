@@ -90,7 +90,7 @@ export function FlowEdge({
               onChange={(e) => setDraft(e.target.value)}
               onBlur={commitLabel}
               onKeyDown={handleKeyDown}
-              placeholder="label…"
+              placeholder="标签..."
               className="text-xs px-2 py-0.5 rounded border border-blue-400 bg-white shadow-sm outline-none w-28 text-center"
             />
           ) : displayLabel ? (

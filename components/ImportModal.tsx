@@ -52,12 +52,11 @@ export function ImportModal({ onClose }: ImportModalProps) {
 
   const statusText = () => {
     if (!value.trim()) return null
-    if (!result) return <span className="text-gray-400">Parsing…</span>
+    if (!result) return <span className="text-gray-400">正在解析...</span>
     if (result.error) return <span className="text-red-500">{result.error}</span>
     return (
       <span className="text-emerald-600">
-        {result.nodes.length} node{result.nodes.length !== 1 ? 's' : ''},&nbsp;
-        {result.edges.length} edge{result.edges.length !== 1 ? 's' : ''} detected
+        已检测到 {result.nodes.length} 个节点，{result.edges.length} 条连线
       </span>
     )
   }
@@ -78,13 +77,13 @@ export function ImportModal({ onClose }: ImportModalProps) {
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
           <div>
-            <h2 id="import-modal-title" className="text-sm font-semibold text-gray-900">Import Mermaid Syntax</h2>
-            <p id="import-modal-desc" className="text-xs text-gray-400 mt-0.5">Paste a flowchart definition to load it onto the canvas</p>
+            <h2 id="import-modal-title" className="text-sm font-semibold text-gray-900">导入 Mermaid 语法</h2>
+            <p id="import-modal-desc" className="text-xs text-gray-400 mt-0.5">粘贴 flowchart 定义，将它加载到画布</p>
           </div>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600 transition-colors p-1 rounded-lg hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
-            aria-label="Close"
+            aria-label="关闭"
           >
             ✕
           </button>
@@ -97,10 +96,10 @@ export function ImportModal({ onClose }: ImportModalProps) {
             value={value}
             onChange={(e) => setValue(e.target.value)}
             className="flex-1 w-full font-mono text-xs text-gray-800 bg-gray-50 border border-gray-200 rounded-lg p-3 resize-none outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder={`flowchart TD\n  A["Start"] --> B{"Decision?"}\n  B --> |"Yes"| C["Do it"]\n  B --> |"No"| D["Skip"]`}
+            placeholder={`flowchart TD\n  A["开始"] --> B{"是否继续？"}\n  B --> |"是"| C["执行"]\n  B --> |"否"| D["跳过"]`}
             spellCheck={false}
             rows={14}
-            aria-label="Mermaid Syntax"
+            aria-label="Mermaid 语法"
           />
           <div className="text-xs min-h-[16px]" aria-live="polite">{statusText()}</div>
         </div>
@@ -111,14 +110,14 @@ export function ImportModal({ onClose }: ImportModalProps) {
             onClick={onClose}
             className="px-4 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-100 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
           >
-            Cancel
+            取消
           </button>
           <button
             onClick={handleImport}
             disabled={!canImport}
             className="px-4 py-1.5 text-xs font-medium bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
           >
-            Import to Canvas
+            导入到画布
           </button>
         </div>
       </div>

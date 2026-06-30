@@ -1,68 +1,59 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import mermaid from 'mermaid'
+import { initializeMermaid, renderMermaidSvg } from '@/lib/mermaidRender'
 
 interface PreviewPanelProps {
   syntax: string
 }
-
-let initialized = false
-let renderId = 0
 
 export function PreviewPanel({ syntax }: PreviewPanelProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    if (!initialized) {
-      mermaid.initialize({
-        startOnLoad: false,
-        theme: 'default',
-        securityLevel: 'strict',
-      })
-      initialized = true
-    }
+    initializeMermaid()
   }, [])
 
   useEffect(() => {
     if (!containerRef.current) return
 
+    let cancelled = false
     const render = async () => {
-      // Use a unique ID each render to avoid "element already exists" errors
-      const id = `mermaid-render-${++renderId}`
       try {
-        const { svg } = await mermaid.render(id, syntax)
-        if (containerRef.current) {
+        const svg = await renderMermaidSvg(syntax, 'mermaid-panel')
+        if (!cancelled && containerRef.current) {
           containerRef.current.innerHTML = svg
           setError(null)
         }
       } catch (err) {
-        // Clean up the leftover element mermaid may have inserted on error
-        document.getElementById(id)?.remove()
-        setError(err instanceof Error ? err.message : 'Render error')
+        if (!cancelled) {
+          setError(err instanceof Error ? err.message : '渲染失败')
+        }
       }
     }
 
     render()
+    return () => {
+      cancelled = true
+    }
   }, [syntax])
 
   return (
     <div className="w-full h-full flex flex-col bg-white">
       <div className="px-4 py-3 border-b border-gray-100 bg-gray-50/80 backdrop-blur-md flex items-center justify-between">
-        <span className="text-sm font-semibold text-gray-700">Mermaid Preview</span>
+        <span className="text-sm font-semibold text-gray-700">Mermaid 预览</span>
         {error && (
-          <span className="text-xs font-medium text-red-500 bg-red-50 px-2 py-0.5 rounded-full">Syntax error</span>
+          <span className="text-xs font-medium text-red-500 bg-red-50 px-2 py-0.5 rounded-full">语法错误</span>
         )}
       </div>
 
       <div className="flex-1 overflow-auto p-4 bg-white">
-        {error ? (
+        <div ref={containerRef} className={`flex items-center justify-center min-h-full ${error ? 'hidden' : ''}`} />
+        {error && (
           <div className="text-xs text-red-400 font-mono whitespace-pre-wrap bg-red-50 p-3 rounded">
             {error}
           </div>
-        ) : (
-          <div ref={containerRef} className="flex items-center justify-center min-h-full" />
         )}
       </div>
 

@@ -5,6 +5,7 @@ import { useShallow } from 'zustand/react/shallow'
 import { useFlowStore } from '@/lib/store'
 import { serialize } from '@/lib/serializer'
 import { downloadMmd, saveDiagramJson, loadDiagramJson } from '@/lib/fileio'
+import { renderMermaidSvg } from '@/lib/mermaidRender'
 import { ImportModal } from '@/components/ImportModal'
 
 interface SettingsPopoverProps {
@@ -100,7 +101,7 @@ export function SettingsPopover({ onClose }: SettingsPopoverProps) {
       onClose()
     } catch (err) {
       if (err instanceof Error && err.message !== 'No file selected') {
-        setLoadError('Invalid file')
+        setLoadError('文件无效')
         setTimeout(() => setLoadError(null), 3000)
       }
     }
@@ -119,9 +120,8 @@ export function SettingsPopover({ onClose }: SettingsPopoverProps) {
   const handleExportSvg = async () => {
     try {
       const { nodes, edges, direction: dir, theme: t, look: l, curveStyle: c } = useFlowStore.getState()
-      const mermaid = (await import('mermaid')).default
       const syntax = serialize(nodes, edges, { direction: dir, theme: t, look: l, curveStyle: c })
-      const { svg } = await mermaid.render(`svg-export-${Date.now()}`, syntax)
+      const svg = await renderMermaidSvg(syntax, 'svg-export')
       const blob = new Blob([svg], { type: 'image/svg+xml' })
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
@@ -150,26 +150,26 @@ export function SettingsPopover({ onClose }: SettingsPopoverProps) {
         }}
       >
         {/* File */}
-        <Section title="File">
+        <Section title="文件">
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-            <NeuBtn onClick={handleLoad} title="Load diagram from .json">
-              {loadError ? '⚠ Error' : 'Load JSON'}
+            <NeuBtn onClick={handleLoad} title="从 .json 加载图表">
+              {loadError ? `⚠ ${loadError}` : '加载 JSON'}
             </NeuBtn>
-            <NeuBtn onClick={handleSave} disabled={nodesLength === 0} title="Save as .json">Save JSON</NeuBtn>
-            <NeuBtn onClick={() => setImportOpen(true)} title="Import Mermaid syntax">Import .mmd</NeuBtn>
-            <NeuBtn onClick={handleDownloadMmd} disabled={nodesLength === 0} title="Download .mmd">Download .mmd</NeuBtn>
-            <NeuBtn onClick={handleExportSvg} disabled={nodesLength === 0} title="Export as SVG">Export SVG</NeuBtn>
+            <NeuBtn onClick={handleSave} disabled={nodesLength === 0} title="保存为 .json">保存 JSON</NeuBtn>
+            <NeuBtn onClick={() => setImportOpen(true)} title="导入 Mermaid 语法">导入 .mmd</NeuBtn>
+            <NeuBtn onClick={handleDownloadMmd} disabled={nodesLength === 0} title="下载 .mmd">下载 .mmd</NeuBtn>
+            <NeuBtn onClick={handleExportSvg} disabled={nodesLength === 0} title="导出为 SVG">导出 SVG</NeuBtn>
           </div>
         </Section>
 
         {/* Objects */}
         {selectedWithParent.length > 0 && (
-          <Section title="Objects">
+          <Section title="对象">
             <NeuBtn
               onClick={() => assignToSubgraph(selectedWithParent.map((n) => n.id), null)}
-              title="Remove selected nodes from their group"
+              title="将选中的节点移出分组"
             >
-              Ungroup
+              取消分组
             </NeuBtn>
           </Section>
         )}

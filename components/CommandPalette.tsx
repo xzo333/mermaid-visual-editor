@@ -64,18 +64,18 @@ export function CommandPalette({ onClose }: CommandPaletteProps) {
 
   const shapeCommands: CommandItem[] = ALL_SHAPES.map(({ shape, label }) => ({
     id: `shape-${shape}`,
-    label: `Draw ${label}`,
-    description: 'Click & drag on canvas',
+    label: `绘制${label}`,
+    description: '在画布上点击并拖拽',
     icon: <ShapeIcon shape={shape} />,
     action: () => { setDrawingShape(shape); onClose() },
   }))
 
   const actionCommands: CommandItem[] = [
-    { id: 'undo', label: 'Undo', description: 'Ctrl+Z', icon: '↩', action: () => { undo(); onClose() } },
-    { id: 'redo', label: 'Redo', description: 'Ctrl+Shift+Z', icon: '↪', action: () => { redo(); onClose() } },
-    { id: 'layout', label: 'Auto Layout', description: 'Re-arrange nodes', icon: '⬡', action: handleAutoLayout },
-    { id: 'copy', label: 'Copy Mermaid Syntax', description: 'Copy to clipboard', icon: '📋', action: handleCopySyntax },
-    { id: 'import', label: 'Import Mermaid Syntax', description: 'Parse .mmd onto canvas', icon: '⬆', action: () => { setImportOpen(true) } },
+    { id: 'undo', label: '撤销', description: 'Ctrl+Z', icon: '↩', action: () => { undo(); onClose() } },
+    { id: 'redo', label: '重做', description: 'Ctrl+Shift+Z', icon: '↪', action: () => { redo(); onClose() } },
+    { id: 'layout', label: '自动布局', description: '重新排列节点', icon: '⬡', action: handleAutoLayout },
+    { id: 'copy', label: '复制 Mermaid 语法', description: '复制到剪贴板', icon: '📋', action: handleCopySyntax },
+    { id: 'import', label: '导入 Mermaid 语法', description: '解析 .mmd 到画布', icon: '⬆', action: () => { setImportOpen(true) } },
   ]
 
   const allCommands = [...actionCommands, ...shapeCommands]
@@ -152,7 +152,7 @@ export function CommandPalette({ onClose }: CommandPaletteProps) {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Search commands, shapes…"
+              placeholder="搜索命令、形状..."
               style={{
                 flex: 1,
                 background: 'transparent',
@@ -171,7 +171,7 @@ export function CommandPalette({ onClose }: CommandPaletteProps) {
           <div style={{ overflowY: 'auto', padding: '8px 8px' }}>
             {filtered.length === 0 ? (
               <div style={{ padding: '20px', textAlign: 'center', color: '#9ca3af', fontSize: 13 }}>
-                No commands found
+                没有找到命令
               </div>
             ) : (
               filtered.map((item, idx) => (
