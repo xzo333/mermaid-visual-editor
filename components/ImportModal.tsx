@@ -13,6 +13,7 @@ export function ImportModal({ onClose }: ImportModalProps) {
   const importDiagram = useFlowStore((s) => s.importDiagram)
   const [value, setValue] = useState('')
   const [result, setResult] = useState<ParseResult | null>(null)
+  const [pasteError, setPasteError] = useState<string | null>(null)
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
@@ -48,9 +49,22 @@ export function ImportModal({ onClose }: ImportModalProps) {
     onClose()
   }, [result, importDiagram, onClose])
 
+  const handlePaste = useCallback(async () => {
+    try {
+      const text = await navigator.clipboard.readText()
+      setValue(text)
+      setPasteError(null)
+      textareaRef.current?.focus()
+    } catch {
+      setPasteError('无法读取剪贴板，请使用 Ctrl+V 粘贴')
+      textareaRef.current?.focus()
+    }
+  }, [])
+
   const canImport = result !== null && result.error === null && result.nodes.length > 0
 
   const statusText = () => {
+    if (pasteError) return <span className="text-amber-600">{pasteError}</span>
     if (!value.trim()) return null
     if (!result) return <span className="text-gray-400">正在解析...</span>
     if (result.error) return <span className="text-red-500">{result.error}</span>
@@ -91,10 +105,23 @@ export function ImportModal({ onClose }: ImportModalProps) {
 
         {/* Textarea */}
         <div className="flex-1 overflow-hidden flex flex-col p-4 gap-2">
+          <div className="flex items-center justify-end">
+            <button
+              onClick={handlePaste}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-700 shadow-sm transition-colors hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+              type="button"
+            >
+              <span aria-hidden="true">📋</span>
+              粘贴
+            </button>
+          </div>
           <textarea
             ref={textareaRef}
             value={value}
-            onChange={(e) => setValue(e.target.value)}
+            onChange={(e) => {
+              setValue(e.target.value)
+              setPasteError(null)
+            }}
             className="flex-1 w-full font-mono text-xs text-gray-800 bg-gray-50 border border-gray-200 rounded-lg p-3 resize-none outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder={`flowchart TD\n  A["开始"] --> B{"是否继续？"}\n  B --> |"是"| C["执行"]\n  B --> |"否"| D["跳过"]`}
             spellCheck={false}

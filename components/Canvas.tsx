@@ -18,6 +18,13 @@ import { FlowEdge } from './EdgeTypes/FlowEdge'
 const nodeTypes = { flowNode: FlowNode }
 const edgeTypes = { flowEdge: FlowEdge }
 
+function isInteractiveTarget(target: EventTarget | null) {
+  if (!(target instanceof HTMLElement)) return false
+  return Boolean(
+    target.closest('input, textarea, select, [contenteditable="true"], [role="dialog"]')
+  )
+}
+
 interface CanvasInnerProps {
   onOpenPalette?: () => void
 }
@@ -41,8 +48,7 @@ function CanvasInner({ onOpenPalette }: CanvasInnerProps) {
   // ── Keyboard shortcuts ─────────────────────────────────────────────────────
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
-      const target = e.target as HTMLElement
-      const isTyping = target.tagName === 'INPUT' || target.tagName === 'TEXTAREA'
+      const isInteractive = isInteractiveTarget(e.target)
 
       // Escape → cancel draw mode
       if (e.key === 'Escape') {
@@ -52,8 +58,10 @@ function CanvasInner({ onOpenPalette }: CanvasInnerProps) {
         return
       }
 
+      if (isInteractive) return
+
       // N → add node (when not typing)
-      if (!isTyping && (e.key === 'n' || e.key === 'N')) {
+      if (e.key === 'n' || e.key === 'N') {
         addNode()
         return
       }
