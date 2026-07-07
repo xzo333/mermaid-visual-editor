@@ -1,237 +1,92 @@
-# Mermaid Visual Editor
+# Mermaid 可视化流程图编辑器
 
-A visual drag-and-drop editor for [Mermaid.js](https://mermaid.js.org) flowcharts. Build diagrams visually — export clean `.mmd` syntax.
+一个本地运行的 Mermaid 流程图可视化编辑器。你可以像画白板一样拖拽节点、连线、调整样式，然后导出标准 Mermaid 语法、`.mmd` 文件或 SVG。
 
-No account. No cloud. Runs locally.
+本项目基于开源项目 [mermaid-visual-editor](https://github.com/saketkattu/mermaid-visual-editor) 继续完善和修改，保留 MIT License。
 
-**[Try the live demo](https://mermaid-visual-editor-delta.vercel.app/)**
+![编辑器截图](docs/screenshot.png)
 
-<img width="1914" height="904" alt="image" src="https://github.com/user-attachments/assets/8626790d-d5cc-4fe1-8dc1-0f3c78792d0b" />
+## 适合谁用
 
+- 想用 Mermaid 记录流程，但不想手写大量语法的人
+- 写技术文档、产品流程、系统架构图的人
+- 想把图保存成文本格式，方便放进 Git、Markdown、Obsidian、知识库的人
 
-Mermaid Visual Editor lets you draw flowcharts by dragging nodes and connecting edges on an infinite canvas. Mermaid syntax is generated automatically — you never hand-type it. Built with Next.js, React Flow, Zustand, and Mermaid.js.
-
-### Install & Run
-
-**Global install (recommended for repeat use):**
-```bash
-npm install -g mermaid-visual-editor
-mermaid-visual-editor
-```
-
-**One-off (no install):**
-```bash
-npx mermaid-visual-editor
-```
-
-Both commands serve the app and open your browser at [http://localhost:3000](http://localhost:3000).
-
-**Requirements:** Node.js 18+
-
----
-
-### Development Setup
+## 快速开始
 
 ```bash
-git clone https://github.com/saketkattu/mermaid-visual-editor.git
+git clone https://github.com/xzo333/mermaid-visual-editor.git
 cd mermaid-visual-editor
 pnpm install
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+启动后打开：
 
-**Requirements:** Node.js 18+, pnpm
-
----
-
-## Why I Built This & Validation
-
-### The Problem
-
-Writing Mermaid syntax by hand works fine for small diagrams. As diagrams grow, it becomes cognitively taxing — syntax errors, layout frustration, editing fatigue. Users shift from *designing systems* to *debugging text*.
-
-The core tension: **human visual thinking vs. text-based diagram construction.**
-
-### Who Feels This Pain
-
-**PKMS Power Users** — rely on plain-text workflows inside tools like Obsidian to maintain portable, future-proof knowledge systems. They tolerate syntax complexity until diagrams exceed a manageable threshold, at which point editing becomes disproportionately effortful.
-
-**Technical Writers & Educators** — use Mermaid to communicate processes and flows in documentation. Syntax introduces friction that competes with their primary job: explaining ideas.
-
-**System Architects & Developers** — value diagrams as structured, version-controlled artifacts. They experience diminishing returns when diagrams become visually complex but syntactically dense.
-
-### Jobs-to-be-Done
-
-- **When modeling complex systems**, I want to express relationships visually without fighting syntax, **so I can focus on thinking rather than formatting.**
-- **When refining diagrams**, I want changes to feel lightweight and intuitive, **so I can iterate rapidly without cognitive fatigue.**
-- **When storing diagrams in my knowledge workflows**, I want them to remain portable and future-proof, **so I avoid lock-in.**
-
-### The Friction Matrix
-
-| Current Approach | Strength | Breaking Point |
-|-----------------|----------|----------------|
-| **Manual syntax** | Maximum portability and precision | Syntax fatigue, high error frequency, cognitive overload as diagrams scale |
-| **Mermaid Live Editor** | Official, free, syntax-complete | Context switching, no bi-directional workflow with local files |
-| **Excalidraw / Whiteboards** | Highly intuitive visual manipulation | Loss of diagram-as-code benefits, weak portability |
-| **AI-assisted generation** | Fast initial creation | Syntax errors, hallucinations, manual cleanup burden |
-
-### Market Signals
-
-Mermaid.js has substantial ecosystem penetration:
-
-- **86,300+ GitHub Stars**
-- **~2.8M Weekly NPM Downloads**
-- **~350,000+ Mermaid-related Plugin Downloads** (Obsidian ecosystem)
-- Estimated friction-affected users: **~2.5M–3M users**
-
-**What users say:**
-
-> *"Creating and editing diagrams visually is much more intuitive."*
->
-> *"Syntax gets cumbersome real fast for larger mind maps."*
->
-> *"Mermaid chooses poor layouts… lines are inconsistent."*
->
-> *"Been waiting for something like this since forever."*
-
----
-
-## Solution + Features
-
-Mermaid Visual Editor takes a **visual-first** approach: draw first, export syntax. The canvas state is the source of truth — Mermaid syntax is always derived, never hand-typed.
-
-### Drawing
-- **Add nodes** — click `+ Add Node`, press `N`, or double-click the canvas
-- **Connect nodes** — drag from the handle at the top/bottom/left/right of any node to another node
-- **14 node shapes** — Rectangle, Rounded, Stadium, Diamond, Circle, Hexagon, Cylinder, and more
-- **Rename** — double-click any node or edge label to edit inline
-
-### Editing
-- **Shape picker** — select a node, then click a shape to change it
-- **Style picker** — customize node fill color, border color, and text color
-- **Edge customization** — change line style (solid, dashed, thick) and arrow type
-- **Delete** — select nodes/edges and press `Backspace` or `Delete`
-- **Duplicate** — duplicate selected nodes and their edges by pressing `Ctrl+D`
-- **Auto Layout** — arrange nodes top-to-bottom powered by Dagre
-- **Undo/Redo** — full history stack (`Ctrl+Z` / `Ctrl+Shift+Z`)
-
-### Diagram Settings
-- **Direction** — switch layout direction (Top-to-Bottom, Left-to-Right, Bottom-to-Top, Right-to-Left)
-- **Theme** — choose Mermaid theme (default, dark, forest, neutral, base)
-- **Hand-drawn** — toggle Mermaid's `look: handDrawn` style
-- **Curve Style** — choose from 12 routing algorithms
-
-### Export & Save
-- **Copy Syntax** — copies valid Mermaid `graph` syntax to clipboard
-- **Download .mmd** — downloads the diagram as a `.mmd` file
-- **Download .svg** — downloads the live rendered diagram as an `.svg` file
-- **Save / Load** — save and reload the canvas as a `.json` file
-
-### Preview
-- **Show Preview** — live Mermaid.js render in a floating panel
-
-### Keyboard Shortcuts
-
-| Key | Action |
-|-----|--------|
-| `N` | Add a new node |
-| `Backspace` / `Delete` | Delete selected node(s) or edge(s) |
-| `Ctrl + D` | Duplicate selected node(s) |
-| `Ctrl + Z` | Undo |
-| `Ctrl + Shift + Z` | Redo |
-| `Escape` | Deselect all |
-
----
-
-## Roadmap
-
-### Near-term
-- [ ] Import Mermaid syntax to canvas
-- [ ] Subgraph support
-- [ ] Sequence diagram support
-- [ ] Mindmap support
-
-### Medium-term
-- [ ] Obsidian plugin
-- [ ] Class diagram support
-- [ ] ER diagram support
-- [ ] State diagram support
-- [ ] Dark mode for the editor UI
-
-### Long-term
-- [ ] Real-time collaboration
-- [ ] AI-assisted diagram generation
-- [ ] VS Code extension
-- [ ] Two-way code-canvas sync
-
----
-
-## Tech Stack & Architecture
-
-| Layer | Choice |
-|-------|--------|
-| Framework | Next.js (App Router) |
-| Visual Canvas | React Flow (XY Flow) |
-| Mermaid Render | mermaid.js |
-| State | Zustand |
-| Styling | Tailwind CSS |
-| Language | TypeScript |
-| Layout | Dagre |
-| Package Manager | pnpm |
-
-### Architecture
-
-```
-User drags nodes/edges
-       |
-  Zustand Store { nodes[], edges[] }
-       |
-  Mermaid Serializer (lib/serializer.ts)
-       |
-  Mermaid syntax string
-       |
-  Preview panel + Export (.mmd / clipboard / .svg)
+```text
+http://localhost:3000
 ```
 
-The canvas state is canonical. Mermaid syntax is always derived — never parsed back in.
+环境要求：
 
----
+- Node.js 18+
+- pnpm
 
-## Contributing
+## 主要功能
 
-PRs welcome. Open an issue first for large changes. See [CONTRIBUTING.md](CONTRIBUTING.md) for full guidelines.
+- 可视化添加、拖拽、连接节点
+- 支持矩形、圆角、菱形、圆形、圆柱、六边形等多种节点形状
+- 支持节点文字、连线文字、颜色、线型、箭头样式编辑
+- 支持撤销、重做、复制、删除、自动布局
+- 支持 Mermaid 实时预览
+- 支持复制 Mermaid 语法
+- 支持导出 `.mmd`、`.svg`
+- 支持保存和加载画布 JSON
+- 支持导入 Mermaid flowchart 语法并转成可编辑画布
+
+## 基本用法
+
+1. 点击添加节点，或在画布空白处双击添加节点
+2. 从节点边缘的连接点拖到另一个节点，创建连线
+3. 双击节点或连线文字进行编辑
+4. 在右侧或浮动面板中调整形状、颜色、箭头和图表方向
+5. 使用预览确认 Mermaid 渲染效果
+6. 复制 Mermaid 语法，或导出 `.mmd` / `.svg`
+
+## 快捷键
+
+| 快捷键 | 功能 |
+| --- | --- |
+| `N` | 添加节点 |
+| `Delete` / `Backspace` | 删除选中节点或连线 |
+| `Ctrl + D` | 复制选中节点 |
+| `Ctrl + Z` | 撤销 |
+| `Ctrl + Shift + Z` | 重做 |
+| `Escape` | 取消选择 |
+
+## 技术栈
+
+- Next.js
+- React
+- React Flow / XY Flow
+- Mermaid.js
+- Zustand
+- Tailwind CSS
+- Dagre
+- TypeScript
+
+## 开发命令
 
 ```bash
-pnpm dev     # development server
-pnpm build   # production build → generates out/
-pnpm lint    # lint
-pnpm audit   # security audit
+pnpm dev      # 本地开发
+pnpm build    # 构建生产版本
+pnpm start    # 本地运行生产版本
+pnpm lint     # 代码检查
 ```
 
-### CI
+## 说明
 
-Every push and PR against `master` runs lint, audit, and build automatically via GitHub Actions.
-
-### Releases
-
-Releases are fully automated — do not manually edit the version in `package.json`.
-
-1. Update `CHANGELOG.md` — move items from `[Unreleased]` to a new versioned section
-2. Go to **Actions → Release → Run workflow**
-3. Choose the bump type (`patch` / `minor` / `major`)
-
-The workflow bumps `package.json`, commits, tags, publishes to npm, and creates a GitHub Release.
-
-> **Required secret:** add `NPM_TOKEN` to repo Settings → Secrets → Actions before triggering a release.
-
----
-
-## Security
-
-See [SECURITY.md](SECURITY.md) for the vulnerability disclosure policy.
-
----
+当前重点是 Mermaid flowchart 的可视化编辑体验。其他 Mermaid 图表类型，例如 sequence diagram、mindmap、class diagram，暂未作为主要支持目标。
 
 ## License
 
